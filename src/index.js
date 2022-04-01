@@ -4,6 +4,8 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 
 const quoteRoutes = require('./routes/quote.routes');
+const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
 const middleware = require('./middleware/errors.middleware');
 
 const app = express();
@@ -37,8 +39,10 @@ app.use(bodyParser.json());
 // ROUTE-HANDLING MIDDLEWARE FUNCTIONS
 // ************************************
 
-// Handle routes for quotes.
-app.use('/quotes', quoteRoutes);
+// Partial API endpoints.
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/quotes', quoteRoutes);
 
 // Handle 404 requests
 app.use(middleware.error404);
