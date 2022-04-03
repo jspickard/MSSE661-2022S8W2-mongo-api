@@ -23,4 +23,4 @@ const quoteSchema = new Schema({
 });
 
 // Expose the collections functions for use in our controller
-module.exports = mongoose.model('quotes', quoteSchema);
+module.exports = mongoose.model('seinfeld-quotes', quoteSchema);

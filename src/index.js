@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
@@ -7,6 +8,8 @@ const quoteRoutes = require('./routes/quote.routes');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const middleware = require('./middleware/errors.middleware');
+const icebreakerRoutes = require('./routes/icebreaker.routes');
+const subjectRoutes = require('./routes/subject.routes');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -14,7 +17,7 @@ const logLevel = process.env.LOG_LEVEL || 'dev';
 
 // Make connection to the db
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/seinfeldquotes', {
+mongoose.connect('mongodb://localhost/MSSE661-2022S8W2', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -35,6 +38,8 @@ app.use(logger(logLevel));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(cors());
+
 // ************************************
 // ROUTE-HANDLING MIDDLEWARE FUNCTIONS
 // ************************************
@@ -43,6 +48,8 @@ app.use(bodyParser.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/quotes', quoteRoutes);
+app.use('/api/icebreaker', icebreakerRoutes);
+app.use('/api/subject', subjectRoutes);
 
 // Handle 404 requests
 app.use(middleware.error404);

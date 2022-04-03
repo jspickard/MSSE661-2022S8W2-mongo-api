@@ -6,7 +6,7 @@
  * Handle req that would produce a 404 status code and respons accordingly.
  */
 exports.error404 = function(req, res, next) {
-  next({ message: 'Not Found. No soup for you!', status: 404 });
+  next({ message: 'Not Found.', status: 404 });
 };
 
 /**

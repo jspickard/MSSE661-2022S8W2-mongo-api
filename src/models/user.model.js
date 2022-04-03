@@ -1,5 +1,7 @@
 // Require Mongoose
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // Define a schema
 const Schema = mongoose.Schema;
@@ -17,7 +19,7 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: 'User must have password.'
+    required: true
   },
   tokens: [
     {
@@ -29,14 +31,6 @@ const userSchema = new Schema({
   ],
 });
 
-userSchema.pre('save', async function (next) {
-  // Hash the password before saving the user model
-  const user = this;
-  if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 8);
-  }
-  next();
-});
 
 userSchema.methods.generateAuthToken = async function () {
   // Generate an auth token for the user

@@ -12,4 +12,6 @@ authRoutes.post('/register', controller.registerUser);
 
 authRoutes.post('/login', controller.login);
 
+authRoutes.post('/logout', controller.logout);
+
 module.exports = authRoutes;

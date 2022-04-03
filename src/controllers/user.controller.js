@@ -20,11 +20,15 @@ exports.getMe = function(req, res) {
     }
 
     //check user exists
-    userModel.find({username: req.body.username}, function(err, user) {
+    userModel.find({_id: decoded.id}, function(err, user) {
       if (err) {
         res.status(500);
+      }
+      if (!user) {
         res.send({msg: 'Could not find user.'});
       }
+      user[0].password = "(hidden)";
+      res.status(200).send(user);
     })
   })
 }

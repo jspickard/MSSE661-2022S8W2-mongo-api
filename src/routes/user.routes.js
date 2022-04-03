@@ -11,7 +11,7 @@ const userRoutes = express.Router();
  * RESTful endpoints make for easily adding to existing API features.
  */
 
- userRoutes.get('/me', userController.getMe);
+ userRoutes.get('/me', verifyToken, userController.getMe);
 
  userRoutes.post('/me/update', verifyToken, authController.updateUser);
 

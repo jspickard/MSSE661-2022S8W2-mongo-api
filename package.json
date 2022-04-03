@@ -1,7 +1,7 @@
 {
-  "name": "seinfeldquotes",
+  "name": "msse661-2022-s8w2_mongoapi",
   "version": "1.0.0",
-  "description": "Seinfeld quotes",
+  "description": "MSSE661-2022S8W2 API for MongoDBs",
   "main": "index.js",
   "dependencies": {
     "abbrev": "^1.1.1",
@@ -39,6 +39,7 @@
     "cookie": "^0.4.2",
     "cookie-signature": "^1.0.6",
     "core-util-is": "^1.0.3",
+    "cors":"^2.8.5",
     "crypto-random-string": "^2.0.0",
     "debug": "^2.6.9",
     "decompress-response": "^3.3.0",

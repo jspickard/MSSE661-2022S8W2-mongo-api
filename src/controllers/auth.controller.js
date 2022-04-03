@@ -7,13 +7,15 @@ const userModel = require('../models/user.model');
 exports.registerUser = function(req, res) {
   const passwordHash = bcrypt.hashSync(req.body.password);
  
-  userModel.find({username: req.body.username, email: req.body.email, password: passwordHash}, function(err, result) {
-    if (err) {
+  userModel.find({username: req.body.username}, function(err, result) { //, password: passwordHash, email: req.body.email
+    console.log(result.length)
+    if (err || (result.length > 0)) {
       //stop registration
       console.log(err);
       res
         .status(500)
         .send({msg: 'Could not register user. Try again later.'});
+        return
     }
 
     const newuser = new userModel({username: req.body.username, email: req.body.email, password: passwordHash});
@@ -33,9 +35,10 @@ exports.registerUser = function(req, res) {
 exports.login = function(req, res) {
   //check user exists
   userModel.find({username: req.body.username}, function(err, user) {
-    if (err) {
+    if (err || (user.length === 0)) {
       res.status(500);
       res.send({msg: 'Could not find user.'});
+      return
     }
 
     console.log(user);
@@ -54,15 +57,16 @@ exports.login = function(req, res) {
           .send({auth: true, msg: 'Logged in!'});
       })
       .catch(console.log);
-});
+  });
 }
 
 exports.updateUser = function(req, res) {
   //check user exists
-  userModel.findOneAndUpdate({username: req.body.username}, function(err, user) {
-    if (err) {
+  userModel.find({username: req.body.username}, function(err, user) {
+    if (err || (result.length > 0)) {
       res.status(500);
       res.send({msg: 'Could not find user.'});
+      return
     }
 
     console.log(user);
@@ -83,3 +87,16 @@ exports.updateUser = function(req, res) {
     );
   });
 }
+
+exports.logout = async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token != req.token;
+    });
+    await req.user.save();
+    res.send();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
