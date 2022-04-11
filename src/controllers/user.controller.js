@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwtconfig = require('../jwt-config');
 const userModel = require('../models/user.model');
 
-exports.getMe = function(req, res) {
+exports.getMe = async (req, res) => {
   const token = req.headers['auth-token'];
 
   if (!token) {

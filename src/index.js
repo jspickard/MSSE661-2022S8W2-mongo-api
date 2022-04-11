@@ -14,6 +14,11 @@ const subjectRoutes = require('./routes/subject.routes');
 const app = express();
 const port = process.env.PORT || 3000;
 const logLevel = process.env.LOG_LEVEL || 'dev';
+const env = process.env.NODE_ENV;
+
+if (env != 'test') {
+  app.use(logger(logLevel));
+}
 
 // Make connection to the db
 mongoose.Promise = global.Promise;

@@ -39,7 +39,7 @@
     "cookie": "^0.4.2",
     "cookie-signature": "^1.0.6",
     "core-util-is": "^1.0.3",
-    "cors":"^2.8.5",
+    "cors": "^2.8.5",
     "crypto-random-string": "^2.0.0",
     "debug": "^2.6.9",
     "decompress-response": "^3.3.0",
@@ -189,8 +189,13 @@
   },
   "scripts": {
     "start": "nodemon ./src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV='test' mocha ./tests/*"
   },
   "author": "James Spickard",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-http":"^4.3.0",
+    "mocha": "^9.2.2"
+  }
 }

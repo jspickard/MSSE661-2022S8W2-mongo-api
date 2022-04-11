@@ -1,6 +1,6 @@
 const quotes = require('../models/quote.model');
 
-exports.getAllquotes = function(req, res) {
+exports.getAllquotes = async (req, res) => {
   quotes.find({}, function(err, data) {
     if (err) {
       res.send(err);
@@ -9,7 +9,7 @@ exports.getAllquotes = function(req, res) {
   });
 };
 
-exports.getquote = function(req, res) {
+exports.getquote = async (req, res) => {
   quotes.findById(req.params.quoteId, function(err, data) {
     if (err) {
       res.send(err);
@@ -18,7 +18,7 @@ exports.getquote = function(req, res) {
   });
 };
 
-exports.createquote = function(req, res) {
+exports.createquote = async (req, res) => {
   const newquote = new quotes({
     owner: req.body.owner,
     quote: req.body.quote,
@@ -31,7 +31,7 @@ exports.createquote = function(req, res) {
   });
 };
 
-exports.updatequote = function(req, res) {
+exports.updatequote = async (req, res) => {
   quotes.findOneAndUpdate(
     { _id: req.params.quoteId },
     req.body,
@@ -45,7 +45,7 @@ exports.updatequote = function(req, res) {
   );
 };
 
-exports.deletequote = function(req, res) {
+exports.deletequote = async (req, res) => {
   quotes.deleteOne({ _id: req.params.quoteId }, function(err) {
     if (err) {
       res.send(err);
@@ -54,7 +54,7 @@ exports.deletequote = function(req, res) {
   });
 };
 
-exports.getrandom = function(req, res) {
+exports.getrandom = async (req, res) => {
   quotes.find({}, function(err, data) {
     if (err) {
       res.send(err);
