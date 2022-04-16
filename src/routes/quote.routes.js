@@ -1,5 +1,6 @@
 const controllers = require('../controllers/quote.controller');
 const express = require('express');
+const canAccess = require('../middleware/auth.middleware');
 
 const quoteRoutes = express.Router();
 /**
@@ -11,19 +12,19 @@ const quoteRoutes = express.Router();
 /**
  * Routes for all quotes. Evaluates to `/quotes/`.
  */
-quoteRoutes.get('/', controllers.getAllquotes).post('/', controllers.createquote);
+quoteRoutes.get('/', canAccess, controllers.getAllquotes).post('/', canAccess, controllers.createquote);
 
 /**
  * Request for a random quote.
  */
- quoteRoutes.get('/getrandom', controllers.getrandom);
+ quoteRoutes.get('/getrandom', canAccess, controllers.getrandom);
 
 /**
  * Routes for a quote by id. Evalutes to `/quotes/:quoteId`.
  */
 quoteRoutes
-  .get('/:quoteId', controllers.getquote)
-  .post('/:quoteId', controllers.updatequote)
-  .delete('/:quoteId', controllers.deletequote);
+  .get('/:quoteId', canAccess, controllers.getquote)
+  .post('/:quoteId', canAccess, controllers.updatequote)
+  .delete('/:quoteId', canAccess, controllers.deletequote);
 
   module.exports = quoteRoutes;

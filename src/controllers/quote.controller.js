@@ -1,66 +1,98 @@
 const quotes = require('../models/quote.model');
+const { serverError } = require('../utils/handlers');
 
 exports.getAllquotes = async (req, res) => {
-  quotes.find({}, function(err, data) {
-    if (err) {
-      res.send(err);
-    }
-    res.json(data);
-  });
-};
-
-exports.getquote = async (req, res) => {
-  quotes.findById(req.params.quoteId, function(err, data) {
-    if (err) {
-      res.send(err);
-    }
-    res.json(data);
-  });
-};
-
-exports.createquote = async (req, res) => {
-  const newquote = new quotes({
-    owner: req.body.owner,
-    quote: req.body.quote,
-  });
-  newquote.save(function(err, data) {
-    if (err) {
-      res.send(err);
-    }
-    res.json(data);
-  });
-};
-
-exports.updatequote = async (req, res) => {
-  quotes.findOneAndUpdate(
-    { _id: req.params.quoteId },
-    req.body,
-    { new: true },
-    function(err, data) {
+  try {
+    quotes.find({}, function(err, data) {
       if (err) {
         res.send(err);
       }
-      res.json(data);
-    }
-  );
+      else {
+        res.json(data);
+      }
+    })
+  } catch{serverError(res);}
+};
+
+exports.getquote = async (req, res) => {
+  try {
+    quotes.findById(req.params.quoteId, function(err, data) {
+      if (err) {
+        res.send(err);
+      }
+      else {
+        res.json(data);
+      }
+    })
+  } catch{serverError(res);}
+};
+
+exports.createquote = async (req, res) => {
+  try {
+    const newquote = new quotes({
+      owner: req.body.owner,
+      quote: req.body.quote,
+      episode: req.body.episode,
+      air_date: req.body.air_date,
+    });
+    newquote.save(function(err, data) {
+      if (err) {
+        res.send(err);
+      }
+      else {
+        res.json(data);
+      }
+    })
+  } catch{serverError(res);}
+};
+
+exports.updatequote = async (req, res) => {
+  try {
+    quotes.findOneAndUpdate(
+      { _id: req.body._id },
+      {
+        owner: req.body.owner,
+        quote: req.body.quote,
+        episode: req.body.episode,
+        air_date: req.body.air_date,
+      },
+      { new: true },
+      (err, data) => {
+        if (err) {
+          res.send(err);
+        }
+        else {
+          res.json(data);
+        }
+      }
+    );
+  } catch{serverError(res);}
 };
 
 exports.deletequote = async (req, res) => {
-  quotes.deleteOne({ _id: req.params.quoteId }, function(err) {
-    if (err) {
-      res.send(err);
-    }
-    res.json({ msg: 'Deleted successfully. Youre killing independent George!' });
-  });
+  try {
+    quotes.deleteOne({ _id: req.params.quoteId }, function(err) {
+      if (err) {
+        res.send(err);
+      }
+      else {
+        res.json({ msg: 'Deleted successfully. Youre killing independent George!' });
+      }
+    })
+  } catch{serverError(res);}
 };
 
 exports.getrandom = async (req, res) => {
-  quotes.find({}, function(err, data) {
-    if (err) {
-      res.send(err);
-    }
-    let size = data.length;
-    let randomIndex = Math.floor(Math.random()*size);
-    res.json(data[randomIndex]);
-  });
+  try {
+    quotes.find({}, function(err, data) {
+      if (err) {
+        res.send(err);
+      }
+      else {
+        let size = data.length;
+        let randomIndex = Math.floor(Math.random()*size);
+        res.json(data[randomIndex]);
+      }
+    });
+  } catch{serverError(res);}
 };
