@@ -21,8 +21,6 @@ describe('Auth API Service', function() {
             .post('/api/auth/register')
             .send(testUser)
             .end(function(err,resp) {
-                console.log('username: ' + resp.body.user.username);
-                console.log('email: ' + resp.body.user.email);
                 expect(resp.body.user.username).to.eql(expectedUser.username);
                 expect(resp.body.user.email).to.eql(expectedUser.email);
                 done();
@@ -60,8 +58,8 @@ describe('Auth API Service', function() {
             console.log('err: ' + err);
             console.log('resp: ' + resp);
             console.log(resp.body);
-            expect(!!resp.body.user).to.be.true;
-            expect(resp.body.token).to.be.a('string');
+            expect(!!resp.body.auth).to.be.true;
+            expect(resp.body.access_token).to.be.a('string');
             done();
           });
     });
@@ -71,13 +69,14 @@ describe('Auth API Service', function() {
             username: 'jerry',
             password: 'castanza',
         };
+        const expectedStatus = 402;
     
         chai
           .request('http://localhost:3000')
           .post('/api/auth/login')
           .send(testUser)
           .end((err, resp) => {
-            expect(!!resp.body.user).to.be.false;
+            expect(resp.status).to.eql(expectedStatus);
             done();
           });
     });
@@ -86,22 +85,19 @@ describe('Auth API Service', function() {
     /*it('should update user info', (done) => {
     }*/
 
-    //LOGOUT WIP
-    /*it('should logout current user', (done) => {
+    //LOGOUT
+    it('should logout current user', (done) => {
         const testUser = {
             username: 'jerry',
-            password: 'castanza',
+            password: 'seinfeld',
         };
     
         chai
           .request('http://localhost:3000')
-          .post('/api/auth/login')
-          .send(testUser)
-          .request('http://localhost:3000')
           .post('/api/auth/logout')
           .end((err, resp) => {
-            expect(resp.status).to.not.eql(500);
+            expect(resp.body.msg).to.eql('Logout successful');
             done();
           });
-    });*/
+    });
 });
