@@ -1,5 +1,6 @@
 const controllers = require('../controllers/subject.controller');
 const express = require('express');
+const canAccess = require('../middleware/auth.middleware');
 
 const subjectRoutes = express.Router();
 /**
@@ -11,7 +12,7 @@ const subjectRoutes = express.Router();
 /**
  * Routes for all subjects. Evaluates to `/subjects/`.
  */
-subjectRoutes.get('/', controllers.getAllsubjects).post('/', controllers.createsubject);
+subjectRoutes.get('/', controllers.getAllsubjects).post('/', canAccess, controllers.createsubject);
 
 /**
  * Request for a random subject.
@@ -23,7 +24,7 @@ subjectRoutes.get('/', controllers.getAllsubjects).post('/', controllers.creates
  */
 subjectRoutes
   .get('/:subjectId', controllers.getsubject)
-  .post('/:subjectId', controllers.updatesubject)
-  .delete('/:subjectId', controllers.deletesubject);
+  .post('/:subjectId', canAccess, controllers.updatesubject)
+  .delete('/:subjectId', canAccess, controllers.deletesubject);
 
   module.exports = subjectRoutes;

@@ -1,9 +1,9 @@
-const icebreakers = require('../models/icebreaker.model');
+const phrases = require('../models/phrase.model');
 const { serverError } = require('../utils/handlers');
 
-exports.getAllicebreakers = async (req, res) => {
+exports.getAllphrases = async (req, res) => {
   try {
-    icebreakers.find({}, function(err, data) {
+    phrases.find({}, function(err, data) {
       if (err) {
         res.send(err);
       }
@@ -14,9 +14,9 @@ exports.getAllicebreakers = async (req, res) => {
   } catch{serverError(res);}
 };
 
-exports.geticebreaker = async (req, res) => {
+exports.getphrase = async (req, res) => {
   try {
-    icebreakers.findById(req.params.icebreakerId, function(err, data) {
+    phrases.findById(req.params.phraseId, function(err, data) {
       if (err) {
         res.send(err);
       }
@@ -27,12 +27,13 @@ exports.geticebreaker = async (req, res) => {
   } catch{serverError(res);}
 };
 
-exports.createicebreaker = async (req, res) => {
+exports.createphrase = async (req, res) => {
   try {
-    const newicebreaker = new icebreakers({
+    const newphrase = new phrases({
       icebreaker: req.body.icebreaker,
+      subject: req.body.subject,
     });
-    newicebreaker.save(function(err, data) {
+    newphrase.save(function(err, data) {
       if (err) {
         res.send(err);
       }
@@ -43,12 +44,13 @@ exports.createicebreaker = async (req, res) => {
   } catch{serverError(res);}
 };
 
-exports.updateicebreaker = async (req, res) => {
+exports.updatephrase = async (req, res) => {
   try {
-    icebreakers.findOneAndUpdate(
+    phrases.findOneAndUpdate(
       { _id: req.body._id },
       {
         icebreaker: req.body.icebreaker,
+        subject: req.body.subject,
       },
       { new: true },
       (err, data) => {
@@ -63,9 +65,9 @@ exports.updateicebreaker = async (req, res) => {
   } catch{serverError(res);}
 };
 
-exports.deleteicebreaker = async (req, res) => {
+exports.deletephrase = async (req, res) => {
   try {
-    icebreakers.deleteOne({ _id: req.params.icebreakerId }, function(err) {
+    phrases.deleteOne({ _id: req.params.phraseId }, function(err) {
       if (err) {
         res.send(err);
       }
@@ -78,7 +80,7 @@ exports.deleteicebreaker = async (req, res) => {
 
 exports.getrandom = async (req, res) => {
   try {
-    icebreakers.find({}, function(err, data) {
+    phrases.find({}, function(err, data) {
       if (err) {
         res.send(err);
       }

@@ -10,6 +10,7 @@ const userRoutes = require('./routes/user.routes');
 const middleware = require('./middleware/errors.middleware');
 const icebreakerRoutes = require('./routes/icebreaker.routes');
 const subjectRoutes = require('./routes/subject.routes');
+const phraseRoutes = require('./routes/phrase.routes');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -53,8 +54,9 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/quotes', quoteRoutes);
-app.use('/api/icebreaker', icebreakerRoutes);
-app.use('/api/subject', subjectRoutes);
+app.use('/api/icebreakers', icebreakerRoutes);
+app.use('/api/subjects', subjectRoutes);
+app.use('/api/phrases', phraseRoutes);
 
 // Handle 404 requests
 app.use(middleware.error404);

@@ -1,5 +1,6 @@
 const controllers = require('../controllers/icebreaker.controller');
 const express = require('express');
+const canAccess = require('../middleware/auth.middleware');
 
 const icebreakerRoutes = express.Router();
 /**
@@ -11,7 +12,7 @@ const icebreakerRoutes = express.Router();
 /**
  * Routes for all icebreakers. Evaluates to `/icebreakers/`.
  */
-icebreakerRoutes.get('/', controllers.getAllicebreakers).post('/', controllers.createicebreaker);
+icebreakerRoutes.get('/', controllers.getAllicebreakers).post('/', canAccess, controllers.createicebreaker);
 
 /**
  * Request for a random icebreaker.
@@ -23,7 +24,7 @@ icebreakerRoutes.get('/', controllers.getAllicebreakers).post('/', controllers.c
  */
 icebreakerRoutes
   .get('/:icebreakerId', controllers.geticebreaker)
-  .post('/:icebreakerId', controllers.updateicebreaker)
-  .delete('/:icebreakerId', controllers.deleteicebreaker);
+  .post('/:icebreakerId', canAccess, controllers.updateicebreaker)
+  .delete('/:icebreakerId', canAccess, controllers.deleteicebreaker);
 
   module.exports = icebreakerRoutes;

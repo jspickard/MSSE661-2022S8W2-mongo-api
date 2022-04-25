@@ -5,19 +5,17 @@ const { generateAccessToken } = require('../src/jwt-config');
 
 chai.use(chaiHttp);
 
-describe('Subjects API Service', function() {
-    it('should GET all subjects', function(done) {
+describe('Phrases API Service', function() {
+    it('should GET all phrases', function(done) {
         
         const testGenToken = generateAccessToken("1337",)
         const testSendToken ="testToken "+testGenToken;
 
         chai
             .request('http://localhost:3000')
-            .get('/api/subjects')
+            .get('/api/phrases')
             .set('auth-token', testSendToken)
             .end(function(err,resp) {
-                console.log("GET all msg: "+resp.msg);
-                console.log("GET all body.msg: "+resp.body.msg);
                 expect(resp.status).to.be.eql(200);
                 expect(resp.body).to.be.a('array');
                 expect(resp.body.length).to.not.be.eql(0);
@@ -25,39 +23,41 @@ describe('Subjects API Service', function() {
             });
     });
 
-    it('should GET a random subject', function(done) {
+    it('should GET a random phrase', function(done) {
 
         const testGenToken = generateAccessToken("1337",)
         const testSendToken ="testToken "+testGenToken;
 
         chai
             .request('http://localhost:3000')
-            .get('/api/subjects/getrandom')
+            .get('/api/phrases/getrandom')
             .set('auth-token', testSendToken)
             .end(function(err,resp) {
                 expect(resp.status).to.be.eql(200);
+                console.log(resp.body.icebreaker + " " + resp.body.subject);
+                expect(resp.body.icebreaker).to.not.be.eql("");
                 expect(resp.body.subject).to.not.be.eql("");
                 done();
             });
     })
 
-    it('should GET a single subject', function(done) {
+    it('should GET a single phrase', function(done) {
 
         const testGenToken = generateAccessToken("1337",)
         const testSendToken ="testToken "+testGenToken;
 
         chai
             .request('http://localhost:3000')
-            .get('/api/subjects/getrandom') //MongoDB auto assigns _id, get from random
+            .get('/api/phrases/getrandom') //MongoDB auto assigns _id, get from random
             .set('auth-token', testSendToken)
             .end(function(err,resp) {
                 const requested = resp.body._id
                 console.log(requested);
                 const expected = resp.body;
-                console.log(resp.body.subject);
+                console.log(resp.body.icebreaker + " " + resp.body.subject);
                 chai
                     .request('http://localhost:3000')
-                    .get('/api/subjects/'+requested)
+                    .get('/api/phrases/'+requested)
                     .set('auth-token', testSendToken)
                     .end(function (errSignle, respSingle) {
                         expect(resp.status).to.be.eql(200);
