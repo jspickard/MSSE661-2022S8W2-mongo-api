@@ -7,6 +7,7 @@ const userModel = require('../models/user.model');
 const { serverError } = require('../utils/handlers');
 
 const tokenDuration = 86400; //seconds (or 24 hours)
+
 const {
   refreshTokens,
   generateAccessToken,
@@ -167,3 +168,81 @@ exports.logout = async (req, res) => {
   res.json({ msg: 'Logout successful' });
 };
 
+
+exports.userinfo = async (req, res) => {
+  try {
+      //check user exists
+      console.log(req.params.username);
+  userModel.find({username: req.params.username}, function(err, user) {
+    if (err || (user.length === 0)) {
+      return res.status(401).send({msg: 'Could not find user.'});
+    }
+
+    console.log('user: ' + user);
+    
+    res.json({
+        username: user[0].username,
+        email: user[0].email,
+      })
+      //.send();
+    })
+  }
+  catch (error) {
+    res.status(400);
+    serverError(error);
+  }
+}
+
+exports.updateuser = async (req, res) => {
+  try {
+    userModel.findOneAndUpdate(
+      { username: req.body.currentUser },
+      {
+        username: req.body.newUsername,
+        email: req.body.newEmail,
+      },
+      { new: true },
+      (err, data) => {
+        if (err) {
+          res.send(err);
+        }
+        else {
+          res.json(data);
+        }
+      }
+    );
+  } catch{serverError(res);}
+};
+
+exports.updatepassword = async (req, res) => {
+  try {
+    const username = req.body.currentUser;
+    const user = await userModel.findOne({ username: username })
+
+    bcrypt
+      .compare(req.body.oldpassword, user.password)
+      .then(function(validPass) {
+        if (!validPass) {
+          return res.status(402).send({msg: 'Invalid password!'});
+        }
+        else {
+          const passwordHash = bcrypt.hashSync(req.body.newpassword);
+          userModel.findOneAndUpdate(
+            { username: req.body.currentUser },
+            {
+              password: passwordHash,
+            },
+            { new: true },
+            (err, data) => {
+              if (err) {
+                res.send(err);
+              }
+              else {
+                res.json(data);
+              }
+            }
+          );
+        }
+      })
+  } catch{serverError(res);}
+};
